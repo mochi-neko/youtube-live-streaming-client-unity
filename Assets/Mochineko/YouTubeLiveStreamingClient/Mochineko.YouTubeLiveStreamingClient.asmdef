@@ -1,0 +1,21 @@
+{
+    "name": "Mochineko.YouTubeLiveStreamingClient",
+    "rootNamespace": "",
+    "references": [
+        "GUID:2620e54ab6edb48f48d55966fd5662fb",
+        "GUID:3ed995982eec04b2e9d304b5b6242945",
+        "GUID:16c83da92001140bea130dffbe23cae4",
+        "GUID:f51ebe6a0ceec4240a699833d6309b23"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": true,
+    "precompiledReferences": [
+        "Newtonsoft.Json.dll"
+    ],
+    "autoReferenced": false,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": true
+}
