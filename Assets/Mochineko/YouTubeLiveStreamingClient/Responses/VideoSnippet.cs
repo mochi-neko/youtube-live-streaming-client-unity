@@ -30,5 +30,17 @@ namespace Mochineko.YouTubeLiveStreamingClient.Responses
 
         [JsonProperty("categoryId"), JsonRequired]
         public string CategoryId { get; private set; } = string.Empty;
+        
+        [JsonProperty("liveBroadcastContent"), JsonRequired]
+        public string LiveBroadcastContent { get; private set; } = string.Empty;
+        
+        [JsonProperty("defaultLanguage"), JsonRequired]
+        public string DefaultLanguage { get; private set; } = string.Empty;
+        
+        [JsonProperty("localized"), JsonRequired]
+        public Localized Localized { get; private set; } = new();
+        
+        [JsonProperty("defaultAudioLanguage"), JsonRequired]
+        public string DefaultAudioLanguage { get; private set; } = string.Empty;
     }
 }

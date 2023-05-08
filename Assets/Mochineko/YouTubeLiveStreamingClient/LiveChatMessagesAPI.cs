@@ -9,6 +9,7 @@ using Mochineko.Relent.Extensions.NewtonsoftJson;
 using Mochineko.Relent.Result;
 using Mochineko.Relent.UncertainResult;
 using Mochineko.YouTubeLiveStreamingClient.Responses;
+using UnityEngine;
 
 namespace Mochineko.YouTubeLiveStreamingClient
 {
@@ -108,6 +109,8 @@ namespace Mochineko.YouTubeLiveStreamingClient
                     return UncertainResults.FailWithTrace<LiveChatMessagesAPIResponse>(
                         $"Failed because response string was null or empty.");
                 }
+                
+                Debug.Log($"[YouTubeLiveStreamingClient] Live chat messages API response from live chat ID:{liveChatID},\n{responseJson}.");
 
                 var deserializeResult = RelentJsonSerializer
                     .Deserialize<LiveChatMessagesAPIResponse>(responseJson);

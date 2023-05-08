@@ -9,6 +9,7 @@ using Mochineko.Relent.Extensions.NewtonsoftJson;
 using Mochineko.Relent.Result;
 using Mochineko.Relent.UncertainResult;
 using Mochineko.YouTubeLiveStreamingClient.Responses;
+using UnityEngine;
 
 namespace Mochineko.YouTubeLiveStreamingClient
 {
@@ -95,6 +96,8 @@ namespace Mochineko.YouTubeLiveStreamingClient
                     return UncertainResults.FailWithTrace<VideosAPIResponse>(
                         $"Failed because response string was null or empty.");
                 }
+                
+                Debug.Log($"[YouTubeLiveStreamingClient] Videos API response from video ID:{videoID},\n{responseJson}.");
 
                 var deserializeResult = RelentJsonSerializer
                     .Deserialize<VideosAPIResponse>(responseJson);

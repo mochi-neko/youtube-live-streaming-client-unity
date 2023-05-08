@@ -14,5 +14,11 @@ namespace Mochineko.YouTubeLiveStreamingClient.Responses
 
         [JsonProperty("high"), JsonRequired]
         public VideoThumbnail High { get; private set; } = new();
+        
+        [JsonProperty("standard"), JsonRequired]
+        public VideoThumbnail Standard { get; private set; } = new();
+        
+        [JsonProperty("maxres"), JsonRequired]
+        public VideoThumbnail Maxres { get; private set; } = new();
     }
 }
