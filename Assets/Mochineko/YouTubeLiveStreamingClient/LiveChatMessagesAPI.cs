@@ -21,8 +21,9 @@ namespace Mochineko.YouTubeLiveStreamingClient
                 HttpClient httpClient,
                 string apiKey,
                 string liveChatID,
-                string? pageToken,
-                CancellationToken cancellationToken)
+                CancellationToken cancellationToken,
+                string? pageToken = null,
+                uint? maxResults = null)
         {
             if (string.IsNullOrEmpty(apiKey))
             {
@@ -49,9 +50,15 @@ namespace Mochineko.YouTubeLiveStreamingClient
                 ["liveChatId"] = liveChatID,
                 ["key"] = apiKey,
             };
+
             if (!string.IsNullOrEmpty(pageToken))
             {
                 parameters.Add("pageToken", pageToken);
+            }
+
+            if (maxResults != null)
+            {
+                parameters.Add("maxResults", maxResults.ToString());
             }
 
             var pathParameters = await new FormUrlEncodedContent(parameters)

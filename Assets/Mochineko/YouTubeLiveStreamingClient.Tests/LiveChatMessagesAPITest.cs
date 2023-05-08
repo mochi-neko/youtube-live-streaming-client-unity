@@ -36,7 +36,6 @@ namespace Mochineko.YouTubeLiveStreamingClient.Tests
                 httpClient,
                 apiKey,
                 liveChatID,
-                pageToken:null,
                 CancellationToken.None);
 
             if (liveChatMessagesResult.Failure)
