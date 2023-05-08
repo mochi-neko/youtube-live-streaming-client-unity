@@ -28,6 +28,7 @@ namespace Mochineko.YouTubeLiveStreamingClient.Samples
 
         private async void Start()
         {
+            // Get YouTube API key from file.
             var apiKey = await File.ReadAllTextAsync(
                 apiKeyPath,
                 this.GetCancellationTokenOnDestroy());
@@ -38,6 +39,7 @@ namespace Mochineko.YouTubeLiveStreamingClient.Samples
                 return;
             }
 
+            // Extract video ID if URL.
             var videoID = YouTubeVideoIDExtractor.ExtractIfURL(videoIDOrURL);
             if (string.IsNullOrEmpty(videoID))
             {
@@ -45,6 +47,7 @@ namespace Mochineko.YouTubeLiveStreamingClient.Samples
                 return;
             }
 
+            // Initialize collector
             collector = new LiveChatMessagesCollector(
                 HttpClient,
                 apiKey,
@@ -52,6 +55,7 @@ namespace Mochineko.YouTubeLiveStreamingClient.Samples
                 maxResultsOfMessages,
                 intervalSeconds);
 
+            // Register events
             collector
                 .OnVideoInformationUpdated
                 .Subscribe(OnVideoInformationUpdated)
@@ -61,7 +65,21 @@ namespace Mochineko.YouTubeLiveStreamingClient.Samples
                 .OnMessageCollected
                 .Subscribe(OnMessageCollected)
                 .AddTo(this);
+
+            // Filter samples to super chats and super stickers
+            collector
+                .OnMessageCollected
+                .Where(message => message.Snippet.Type is LiveChatMessageType.superChatEvent)
+                .Subscribe(OnSuperChatMessageCollected)
+                .AddTo(this);
             
+            collector
+                .OnMessageCollected
+                .Where(message => message.Snippet.Type is LiveChatMessageType.superStickerEvent)
+                .Subscribe(OnSuperStickerMessageCollected)
+                .AddTo(this);
+            
+            // Begin collection
             collector.BeginCollection();
         }
 
@@ -80,6 +98,18 @@ namespace Mochineko.YouTubeLiveStreamingClient.Samples
         {
             Debug.Log(
                 $"[YouTubeLiveStreamingClient.Samples] Collect message: [{message.Snippet.Type}] {message.Snippet.DisplayMessage} from {message.AuthorDetails.DisplayName} at {message.Snippet.PublishedAt}.");
+        }
+        
+        private void OnSuperChatMessageCollected(LiveChatMessageItem message)
+        {
+            Debug.Log(
+                $"<color=orange>[YouTubeLiveStreamingClient.Samples] Collect super chat message: {message.Snippet.DisplayMessage}, {message.Snippet.SuperChatDetails?.AmountDisplayString} from {message.AuthorDetails.DisplayName} at {message.Snippet.PublishedAt}.</color>");
+        }
+        
+        private void OnSuperStickerMessageCollected(LiveChatMessageItem message)
+        {
+            Debug.Log(
+                $"<color=orange>[YouTubeLiveStreamingClient.Samples] Collect super chat message: {message.Snippet.DisplayMessage}, {message.Snippet.SuperStickerDetails?.AmountDisplayString} from {message.AuthorDetails.DisplayName} at {message.Snippet.PublishedAt}.</color>");
         }
     }
 }

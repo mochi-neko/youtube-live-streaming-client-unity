@@ -11,6 +11,9 @@ using UnityEngine;
 
 namespace Mochineko.YouTubeLiveStreamingClient
 {
+    /// <summary>
+    /// Collects and provides live chat messages from YouTube Data API v3.
+    /// </summary>
     public sealed class LiveChatMessagesCollector : IDisposable
     {
         private readonly HttpClient httpClient;
@@ -18,7 +21,7 @@ namespace Mochineko.YouTubeLiveStreamingClient
         private readonly string videoID;
         private readonly uint maxResultsOfMessages;
         private readonly int intervalSeconds;
-        private readonly CancellationTokenSource cancellationTokenSource;
+        private readonly CancellationTokenSource cancellationTokenSource = new();
 
         private readonly Subject<VideosAPIResponse> onVideoInformationUpdated = new();
         public IObservable<VideosAPIResponse> OnVideoInformationUpdated => onVideoInformationUpdated;
@@ -45,7 +48,6 @@ namespace Mochineko.YouTubeLiveStreamingClient
             this.videoID = videoID;
             this.maxResultsOfMessages = maxResultsOfMessages;
             this.intervalSeconds = intervalSeconds;
-            this.cancellationTokenSource = new();
         }
 
         public void Dispose()
@@ -53,6 +55,9 @@ namespace Mochineko.YouTubeLiveStreamingClient
             cancellationTokenSource.Dispose();
         }
 
+        /// <summary>
+        /// Begins collecting live chat messages.
+        /// </summary>
         public void BeginCollection()
         {
             if (isCollecting)
@@ -95,6 +100,12 @@ namespace Mochineko.YouTubeLiveStreamingClient
             if (liveChatID == null)
             {
                 await GetLiveChatIDAsync(cancellationToken);
+                
+                // Succeeded to get live chat ID
+                if (liveChatID != null)
+                {
+                    await PollLiveChatMessagesAsync(liveChatID, cancellationToken);
+                }
             }
             else
             {

@@ -13,10 +13,26 @@ using UnityEngine;
 
 namespace Mochineko.YouTubeLiveStreamingClient
 {
+    /// <summary>
+    /// LiveChatMessages API of YouTube Data API v3.
+    /// See also https://developers.google.com/youtube/v3/live/docs/liveChatMessages
+    /// </summary>
     public static class LiveChatMessagesAPI
     {
         private const string EndPoint = "/liveChat/messages";
 
+        /// <summary>
+        /// Gets live chat messages by live chat ID.
+        /// </summary>
+        /// <param name="httpClient"></param>
+        /// <param name="apiKey"></param>
+        /// <param name="liveChatID"></param>
+        /// <param name="cancellationToken"></param>
+        /// <param name="pageToken"></param>
+        /// <param name="maxResults">Default max results is 500</param>
+        /// <returns></returns>
+        /// <exception cref="UncertainResultPatternMatchException"></exception>
+        /// <exception cref="ResultPatternMatchException"></exception>
         public static async UniTask<IUncertainResult<LiveChatMessagesAPIResponse>>
             GetLiveChatMessagesAsync(
                 HttpClient httpClient,

@@ -13,10 +13,24 @@ using UnityEngine;
 
 namespace Mochineko.YouTubeLiveStreamingClient
 {
+    /// <summary>
+    /// Videos API of YouTube Data API v3.
+    /// See also https://developers.google.com/youtube/v3/docs/videos
+    /// </summary>
     public static class VideosAPI
     {
         private const string EndPoint = "/videos";
         
+        /// <summary>
+        /// Gets video information by video ID.
+        /// </summary>
+        /// <param name="httpClient"></param>
+        /// <param name="apiKey"></param>
+        /// <param name="videoID"></param>
+        /// <param name="cancellationToken"></param>
+        /// <returns></returns>
+        /// <exception cref="UncertainResultPatternMatchException"></exception>
+        /// <exception cref="ResultPatternMatchException"></exception>
         public static async UniTask<IUncertainResult<VideosAPIResponse>>
             GetVideoInformationAsync(
                 HttpClient httpClient,

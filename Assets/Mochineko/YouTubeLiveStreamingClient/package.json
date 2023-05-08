@@ -1,0 +1,11 @@
+{
+  "name": "com.mochineko.youtube-live-streaming-client",
+  "version": "0.1.0",
+  "displayName": "YouTube Live Streaming Client",
+  "description": "YouTube Live Streaming API Client for Unity.",
+  "unity": "2021.3",
+  "author": {
+    "name": "Mochineko",
+    "email": "t.o.e.4315@gmail.com"
+  }
+}

@@ -31,16 +31,6 @@
       },
       "hash": "5fd87387912763429e4c8008157ed6a654c3093c"
     },
-    "com.mochineko.relent.extensions.unitask": {
-      "version": "https://github.com/mochi-neko/Relent.git?path=/Assets/Mochineko/Relent.Extensions/UniTask#0.2.0",
-      "depth": 0,
-      "source": "git",
-      "dependencies": {
-        "com.mochineko.relent": "https://github.com/mochi-neko/Relent.git?path=/Assets/Mochineko/Relent#0.2.0",
-        "com.cysharp.unitask": "https://github.com/Cysharp/UniTask.git?path=src/UniTask/Assets/Plugins/UniTask"
-      },
-      "hash": "5fd87387912763429e4c8008157ed6a654c3093c"
-    },
     "com.neuecc.unirx": {
       "version": "https://github.com/neuecc/UniRx.git?path=Assets/Plugins/UniRx/Scripts",
       "depth": 0,
