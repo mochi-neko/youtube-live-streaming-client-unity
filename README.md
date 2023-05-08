@@ -34,7 +34,7 @@ Standard workflow is as follows.
 2. Get live chat ID from videos API with API key and video ID.
 3. Get live chat messages from live streaming messages API with API key and live chat ID.
 
-You can select 2 ways to do above workflow.
+You can select from 2 ways to do above workflow.
 - Directly use `VideosAPI` and `LiveChatMessagesAPI`.
   - See [test code](https://github.com/mochi-neko/youtube-live-streaming-client-unity/blob/main/Assets/Mochineko/YouTubeLiveStreamingClient.Tests/LiveChatMessagesAPITest.cs).
 - Use `LiveChatMessagesCollector` that polls `LiveChatMessagesAPI` and provides messages as event.
