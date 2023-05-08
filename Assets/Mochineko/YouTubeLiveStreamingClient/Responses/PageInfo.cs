@@ -7,9 +7,9 @@ namespace Mochineko.YouTubeLiveStreamingClient.Responses
     public sealed class PageInfo
     {
         [JsonProperty("totalResults"), JsonRequired]
-        public int TotalResults { get; private set; }
+        public uint TotalResults { get; private set; }
 
         [JsonProperty("resultsPerPage"), JsonRequired]
-        public int ResultsPerPage { get; private set; }
+        public uint ResultsPerPage { get; private set; }
     }
 }

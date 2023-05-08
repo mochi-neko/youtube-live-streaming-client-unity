@@ -5,11 +5,13 @@ using Newtonsoft.Json;
 namespace Mochineko.YouTubeLiveStreamingClient.Responses
 {
     [JsonObject]
-    internal sealed class VideosAPIResponse
+    public sealed class VideosAPIResponse
     {
-        [JsonProperty("kind"), JsonRequired] public string Kind { get; private set; } = string.Empty;
+        [JsonProperty("kind"), JsonRequired]
+        public string Kind { get; private set; } = string.Empty;
 
-        [JsonProperty("etag"), JsonRequired] public string Etag { get; private set; } = string.Empty;
+        [JsonProperty("etag"), JsonRequired]
+        public string Etag { get; private set; } = string.Empty;
 
         [JsonProperty("items"), JsonRequired]
         public List<VideoItem> Items { get; private set; } = new();

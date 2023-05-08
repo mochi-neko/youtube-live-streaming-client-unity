@@ -14,7 +14,7 @@ namespace Mochineko.YouTubeLiveStreamingClient.Responses
         public DateTime ScheduledStartTime { get; private set; }
 
         [JsonProperty("concurrentViewers"), JsonRequired]
-        public int ConcurrentViewers { get; private set; }
+        public uint ConcurrentViewers { get; private set; }
 
         [JsonProperty("activeLiveChatId"), JsonRequired]
         public string ActiveLiveChatId { get; private set; } = string.Empty;

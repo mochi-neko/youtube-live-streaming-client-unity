@@ -13,7 +13,7 @@ namespace Mochineko.YouTubeLiveStreamingClient.Tests
     [TestFixture]
     internal sealed class LiveChatMessagesAPITest
     {
-        [TestCase("P_6hC6qjnYM")]
+        [TestCase("tcRvI1rSokk")]
         [RequiresPlayMode(false)]
         public async Task GetLiveStreamingDetailsAsyncTest(string videoID)
         {
@@ -49,7 +49,7 @@ namespace Mochineko.YouTubeLiveStreamingClient.Tests
             var liveChatMessages = liveChatMessagesResult.Unwrap().Items;
             foreach (var message in liveChatMessages)
             {
-                Debug.Log($"{message.Snippet.Type}:{message.AuthorDetails.DisplayName} -> {message.Snippet.DisplayMessage}.");
+                Debug.Log($"{message.Snippet.Type}:{message.AuthorDetails.DisplayName} -> {message.Snippet.DisplayMessage} at {message.Snippet.PublishedAt}.");
             }
         }
     }
