@@ -44,7 +44,7 @@ namespace Mochineko.YouTubeLiveStreamingClient
             // Build path parameters
             var parameters = new Dictionary<string, string>()
             {
-                ["part"] = "liveStreamingDetails",
+                ["part"] = "snippet,liveStreamingDetails",
                 ["id"] = videoID,
                 ["key"] = apiKey,
             };

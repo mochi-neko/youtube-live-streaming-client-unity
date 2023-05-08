@@ -73,7 +73,7 @@ namespace Mochineko.YouTubeLiveStreamingClient.Samples
         private void OnVideoInformationUpdated(VideosAPIResponse response)
         {
             Debug.Log(
-                $"[YouTubeLiveStreamingClient.Samples] Update video information: {response.Items[0].LiveStreamingDetails.ActiveLiveChatId}.");
+                $"[YouTubeLiveStreamingClient.Samples] Update video information, title:{response.Items[0].Snippet.Title}, live chat ID:{response.Items[0].LiveStreamingDetails.ActiveLiveChatId}.");
         }
 
         private void OnMessageCollected(LiveChatMessageItem message)
