@@ -136,8 +136,9 @@ namespace Mochineko.YouTubeLiveStreamingClient
             // Response error
             else
             {
+                var errorResponse = await responseMessage.Content.ReadAsStringAsync();
                 return UncertainResults.FailWithTrace<LiveChatMessagesAPIResponse>(
-                    $"Failed because the API returned status code:({(int)responseMessage.StatusCode}){responseMessage.StatusCode}."
+                    $"Failed because the API returned status code:({(int)responseMessage.StatusCode}){responseMessage.StatusCode}, response:{errorResponse}."
                 );
             }
         }
