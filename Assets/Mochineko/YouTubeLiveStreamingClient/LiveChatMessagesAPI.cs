@@ -12,42 +12,48 @@ using Mochineko.YouTubeLiveStreamingClient.Responses;
 
 namespace Mochineko.YouTubeLiveStreamingClient
 {
-    public static class VideosAPI
+    public static class LiveChatMessagesAPI
     {
-        private const string EndPoint = "/videos";
-        
-        public static async UniTask<IUncertainResult<LiveStreamingDetails>>
-            GetLiveStreamingDetailsAsync(
+        private const string EndPoint = "/liveChat/messages";
+
+        public static async UniTask<IUncertainResult<LiveChatMessagesAPIResponse>>
+            GetLiveChatMessagesAsync(
                 HttpClient httpClient,
                 string apiKey,
-                string videoID,
+                string liveChatID,
+                string? pageToken,
                 CancellationToken cancellationToken)
         {
             if (string.IsNullOrEmpty(apiKey))
             {
-                return UncertainResults.FailWithTrace<LiveStreamingDetails>(
+                return UncertainResults.FailWithTrace<LiveChatMessagesAPIResponse>(
                     $"Failed because {nameof(apiKey)} is null or empty.");
             }
-            
-            if (string.IsNullOrEmpty(videoID))
+
+            if (string.IsNullOrEmpty(liveChatID))
             {
-                return UncertainResults.FailWithTrace<LiveStreamingDetails>(
-                    $"Failed because {nameof(videoID)} is null or empty.");
+                return UncertainResults.FailWithTrace<LiveChatMessagesAPIResponse>(
+                    $"Failed because {nameof(liveChatID)} is null or empty.");
             }
 
             if (cancellationToken.IsCancellationRequested)
             {
-                return UncertainResults.RetryWithTrace<LiveStreamingDetails>(
+                return UncertainResults.RetryWithTrace<LiveChatMessagesAPIResponse>(
                     "Retryable because cancellation has been already requested.");
             }
 
             // Build path parameters
             var parameters = new Dictionary<string, string>()
             {
-                ["part"] = "liveStreamingDetails",
-                ["id"] = videoID,
+                ["part"] = "id,snippet,authorDetails",
+                ["liveChatId"] = liveChatID,
                 ["key"] = apiKey,
             };
+            if (!string.IsNullOrEmpty(pageToken))
+            {
+                parameters.Add("pageToken", pageToken);
+            }
+
             var pathParameters = await new FormUrlEncodedContent(parameters)
                 .ReadAsStringAsync();
 
@@ -75,11 +81,11 @@ namespace Mochineko.YouTubeLiveStreamingClient
                     break;
 
                 case IUncertainRetryableResult<HttpResponseMessage> apiRetryable:
-                    return UncertainResults.RetryWithTrace<LiveStreamingDetails>(
+                    return UncertainResults.RetryWithTrace<LiveChatMessagesAPIResponse>(
                         $"Retryable because -> {apiRetryable.Message}.");
 
                 case IUncertainFailureResult<HttpResponseMessage> apiFailure:
-                    return UncertainResults.FailWithTrace<LiveStreamingDetails>(
+                    return UncertainResults.FailWithTrace<LiveChatMessagesAPIResponse>(
                         $"Failed because -> {apiFailure.Message}.");
 
                 default:
@@ -92,48 +98,35 @@ namespace Mochineko.YouTubeLiveStreamingClient
                 var responseJson = await responseMessage.Content.ReadAsStringAsync();
                 if (string.IsNullOrEmpty(responseJson))
                 {
-                    return UncertainResults.FailWithTrace<LiveStreamingDetails>(
+                    return UncertainResults.FailWithTrace<LiveChatMessagesAPIResponse>(
                         $"Failed because response string was null or empty.");
                 }
 
                 var deserializeResult = RelentJsonSerializer
-                    .Deserialize<VideosAPIResponse>(responseJson);
-                switch (deserializeResult)
+                    .Deserialize<LiveChatMessagesAPIResponse>(responseJson);
+                return deserializeResult switch
                 {
-                    case ISuccessResult<VideosAPIResponse> deserializeSuccess:
-                        var response = deserializeSuccess.Result;
-                        if (response.Items.Count != 0)
-                        {
-                            return UncertainResults.Succeed(
-                                response
-                                    .Items[0]
-                                    .LiveStreamingDetails);
-                        }
-                        else
-                        {
-                            return UncertainResults.FailWithTrace<LiveStreamingDetails>(
-                                $"Failed because response items was empty.");
-                        }
+                    ISuccessResult<LiveChatMessagesAPIResponse> deserializeSuccess
+                        => UncertainResults.Succeed(deserializeSuccess.Result),
 
-                    case IFailureResult<VideosAPIResponse> deserializeFailure:
-                        return UncertainResults.FailWithTrace<LiveStreamingDetails>(
-                            $"Failed to deserialize json to dictionary because -> {deserializeFailure.Message}, JSON:{responseJson}.");
+                    IFailureResult<LiveChatMessagesAPIResponse> deserializeFailure
+                        => UncertainResults.FailWithTrace<LiveChatMessagesAPIResponse>(
+                            $"Failed to deserialize json to dictionary because -> {deserializeFailure.Message}, JSON:{responseJson}."),
 
-                    default:
-                        throw new ResultPatternMatchException(nameof(deserializeResult));
-                }
+                    _ => throw new ResultPatternMatchException(nameof(deserializeResult))
+                };
             }
             // Retryable
             else if (responseMessage.StatusCode is HttpStatusCode.TooManyRequests
                      || (int)responseMessage.StatusCode is >= 500 and <= 599)
             {
-                return UncertainResults.RetryWithTrace<LiveStreamingDetails>(
+                return UncertainResults.RetryWithTrace<LiveChatMessagesAPIResponse>(
                     $"Retryable because the API returned status code:({(int)responseMessage.StatusCode}){responseMessage.StatusCode}.");
             }
             // Response error
             else
             {
-                return UncertainResults.FailWithTrace<LiveStreamingDetails>(
+                return UncertainResults.FailWithTrace<LiveChatMessagesAPIResponse>(
                     $"Failed because the API returned status code:({(int)responseMessage.StatusCode}){responseMessage.StatusCode}."
                 );
             }

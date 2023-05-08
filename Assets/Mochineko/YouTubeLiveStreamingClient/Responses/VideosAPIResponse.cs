@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using Newtonsoft.Json;
 
-namespace Mochineko.YouTubeLiveStreamingClient
+namespace Mochineko.YouTubeLiveStreamingClient.Responses
 {
     [JsonObject]
     internal sealed class VideosAPIResponse

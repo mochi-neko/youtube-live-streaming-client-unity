@@ -1,10 +1,10 @@
 #nullable enable
 using Newtonsoft.Json;
 
-namespace Mochineko.YouTubeLiveStreamingClient
+namespace Mochineko.YouTubeLiveStreamingClient.Responses
 {
     [JsonObject]
-    internal sealed class VideoItem
+    public sealed class VideoItem
     {
         [JsonProperty("kind"), JsonRequired] public string Kind { get; private set; } = string.Empty;
 
