@@ -56,20 +56,20 @@ namespace Mochineko.YouTubeLiveStreamingClient
                     "Retryable because cancellation has been already requested.");
             }
 
-            // Build path parameters
+            // Build query parameters
             var parameters = new Dictionary<string, string>()
             {
                 ["part"] = "snippet,liveStreamingDetails",
                 ["id"] = videoID,
                 ["key"] = apiKey,
             };
-            var pathParameters = await new FormUrlEncodedContent(parameters)
+            var queryParameters = await new FormUrlEncodedContent(parameters)
                 .ReadAsStringAsync();
 
             // Build request message
             var requestMessage = new HttpRequestMessage(
                 HttpMethod.Get,
-                YouTubeAPIURL.BaseURL + EndPoint + "?" + pathParameters);
+                YouTubeAPIURL.BaseURL + EndPoint + "?" + queryParameters);
 
             // Send request
             HttpResponseMessage responseMessage;
