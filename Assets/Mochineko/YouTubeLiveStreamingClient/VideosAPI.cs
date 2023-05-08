@@ -16,8 +16,8 @@ namespace Mochineko.YouTubeLiveStreamingClient
     {
         private const string EndPoint = "/videos";
         
-        public static async UniTask<IUncertainResult<LiveStreamingDetails>>
-            GetLiveStreamingDetailsAsync(
+        public static async UniTask<IUncertainResult<VideosAPIResponse>>
+            GetVideoInformationAsync(
                 HttpClient httpClient,
                 string apiKey,
                 string videoID,
@@ -25,19 +25,19 @@ namespace Mochineko.YouTubeLiveStreamingClient
         {
             if (string.IsNullOrEmpty(apiKey))
             {
-                return UncertainResults.FailWithTrace<LiveStreamingDetails>(
+                return UncertainResults.FailWithTrace<VideosAPIResponse>(
                     $"Failed because {nameof(apiKey)} is null or empty.");
             }
             
             if (string.IsNullOrEmpty(videoID))
             {
-                return UncertainResults.FailWithTrace<LiveStreamingDetails>(
+                return UncertainResults.FailWithTrace<VideosAPIResponse>(
                     $"Failed because {nameof(videoID)} is null or empty.");
             }
 
             if (cancellationToken.IsCancellationRequested)
             {
-                return UncertainResults.RetryWithTrace<LiveStreamingDetails>(
+                return UncertainResults.RetryWithTrace<VideosAPIResponse>(
                     "Retryable because cancellation has been already requested.");
             }
 
@@ -75,11 +75,11 @@ namespace Mochineko.YouTubeLiveStreamingClient
                     break;
 
                 case IUncertainRetryableResult<HttpResponseMessage> apiRetryable:
-                    return UncertainResults.RetryWithTrace<LiveStreamingDetails>(
+                    return UncertainResults.RetryWithTrace<VideosAPIResponse>(
                         $"Retryable because -> {apiRetryable.Message}.");
 
                 case IUncertainFailureResult<HttpResponseMessage> apiFailure:
-                    return UncertainResults.FailWithTrace<LiveStreamingDetails>(
+                    return UncertainResults.FailWithTrace<VideosAPIResponse>(
                         $"Failed because -> {apiFailure.Message}.");
 
                 default:
@@ -92,7 +92,7 @@ namespace Mochineko.YouTubeLiveStreamingClient
                 var responseJson = await responseMessage.Content.ReadAsStringAsync();
                 if (string.IsNullOrEmpty(responseJson))
                 {
-                    return UncertainResults.FailWithTrace<LiveStreamingDetails>(
+                    return UncertainResults.FailWithTrace<VideosAPIResponse>(
                         $"Failed because response string was null or empty.");
                 }
 
@@ -101,22 +101,10 @@ namespace Mochineko.YouTubeLiveStreamingClient
                 switch (deserializeResult)
                 {
                     case ISuccessResult<VideosAPIResponse> deserializeSuccess:
-                        var response = deserializeSuccess.Result;
-                        if (response.Items.Count != 0)
-                        {
-                            return UncertainResults.Succeed(
-                                response
-                                    .Items[0]
-                                    .LiveStreamingDetails);
-                        }
-                        else
-                        {
-                            return UncertainResults.FailWithTrace<LiveStreamingDetails>(
-                                $"Failed because response items was empty.");
-                        }
+                        return UncertainResults.Succeed(deserializeSuccess.Result);
 
                     case IFailureResult<VideosAPIResponse> deserializeFailure:
-                        return UncertainResults.FailWithTrace<LiveStreamingDetails>(
+                        return UncertainResults.FailWithTrace<VideosAPIResponse>(
                             $"Failed to deserialize json to dictionary because -> {deserializeFailure.Message}, JSON:{responseJson}.");
 
                     default:
@@ -127,13 +115,13 @@ namespace Mochineko.YouTubeLiveStreamingClient
             else if (responseMessage.StatusCode is HttpStatusCode.TooManyRequests
                      || (int)responseMessage.StatusCode is >= 500 and <= 599)
             {
-                return UncertainResults.RetryWithTrace<LiveStreamingDetails>(
+                return UncertainResults.RetryWithTrace<VideosAPIResponse>(
                     $"Retryable because the API returned status code:({(int)responseMessage.StatusCode}){responseMessage.StatusCode}.");
             }
             // Response error
             else
             {
-                return UncertainResults.FailWithTrace<LiveStreamingDetails>(
+                return UncertainResults.FailWithTrace<VideosAPIResponse>(
                     $"Failed because the API returned status code:({(int)responseMessage.StatusCode}){responseMessage.StatusCode}."
                 );
             }

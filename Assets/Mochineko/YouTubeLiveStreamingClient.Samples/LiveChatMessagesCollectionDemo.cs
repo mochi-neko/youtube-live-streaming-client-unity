@@ -53,6 +53,11 @@ namespace Mochineko.YouTubeLiveStreamingClient.Samples
                 intervalSeconds);
 
             collector
+                .OnVideoInformationUpdated
+                .Subscribe(OnVideoInformationUpdated)
+                .AddTo(this);
+
+            collector
                 .OnMessageCollected
                 .Subscribe(OnMessageCollected)
                 .AddTo(this);
@@ -63,6 +68,12 @@ namespace Mochineko.YouTubeLiveStreamingClient.Samples
         private void OnDestroy()
         {
             collector?.Dispose();
+        }
+        
+        private void OnVideoInformationUpdated(VideosAPIResponse response)
+        {
+            Debug.Log(
+                $"[YouTubeLiveStreamingClient.Samples] Update video information: {response.Items[0].LiveStreamingDetails.ActiveLiveChatId}.");
         }
 
         private void OnMessageCollected(LiveChatMessageItem message)

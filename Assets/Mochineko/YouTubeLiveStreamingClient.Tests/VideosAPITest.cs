@@ -24,7 +24,7 @@ namespace Mochineko.YouTubeLiveStreamingClient.Tests
             var httpClient = new HttpClient();
             var apiKey = await File.ReadAllTextAsync(apiKeyPath, CancellationToken.None);
 
-            var result = await VideosAPI.GetLiveStreamingDetailsAsync(
+            var result = await VideosAPI.GetVideoInformationAsync(
                 httpClient,
                 apiKey,
                 videoID,

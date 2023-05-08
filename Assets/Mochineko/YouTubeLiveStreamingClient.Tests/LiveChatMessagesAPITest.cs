@@ -24,13 +24,13 @@ namespace Mochineko.YouTubeLiveStreamingClient.Tests
             var httpClient = new HttpClient();
             var apiKey = await File.ReadAllTextAsync(apiKeyPath, CancellationToken.None);
 
-            var result = await VideosAPI.GetLiveStreamingDetailsAsync(
+            var result = await VideosAPI.GetVideoInformationAsync(
                 httpClient,
                 apiKey,
                 videoID,
                 CancellationToken.None);
             
-            var liveChatID = result.Unwrap().ActiveLiveChatId;
+            var liveChatID = result.Unwrap().Items[0].LiveStreamingDetails.ActiveLiveChatId;
             
             var liveChatMessagesResult = await LiveChatMessagesAPI.GetLiveChatMessagesAsync(
                 httpClient,
