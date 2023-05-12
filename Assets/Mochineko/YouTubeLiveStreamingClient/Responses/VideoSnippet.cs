@@ -25,8 +25,8 @@ namespace Mochineko.YouTubeLiveStreamingClient.Responses
         [JsonProperty("channelTitle"), JsonRequired]
         public string ChannelTitle { get; private set; } = string.Empty;
 
-        [JsonProperty("tags"), JsonRequired]
-        public string[] Tags { get; private set; } = Array.Empty<string>();
+        [JsonProperty("tags")]
+        public string[]? Tags { get; private set; }
 
         [JsonProperty("categoryId"), JsonRequired]
         public string CategoryId { get; private set; } = string.Empty;
@@ -34,13 +34,13 @@ namespace Mochineko.YouTubeLiveStreamingClient.Responses
         [JsonProperty("liveBroadcastContent"), JsonRequired]
         public string LiveBroadcastContent { get; private set; } = string.Empty;
         
-        [JsonProperty("defaultLanguage"), JsonRequired]
-        public string DefaultLanguage { get; private set; } = string.Empty;
+        [JsonProperty("defaultLanguage")]
+        public string? DefaultLanguage { get; private set; }
         
         [JsonProperty("localized"), JsonRequired]
         public Localized Localized { get; private set; } = new();
         
-        [JsonProperty("defaultAudioLanguage"), JsonRequired]
-        public string DefaultAudioLanguage { get; private set; } = string.Empty;
+        [JsonProperty("defaultAudioLanguage")]
+        public string? DefaultAudioLanguage { get; private set; }
     }
 }
