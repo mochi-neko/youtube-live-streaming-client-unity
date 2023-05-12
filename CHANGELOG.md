@@ -7,10 +7,15 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.1.1] - 2023-05-12
+
+## Fixed
+- Improve parameters requirement of videos API.
+- Improve video ID extraction.
+
 ## [0.1.0] - 2023-05-08
 
 ### Added
-
 - Add videos API to get live chat ID.
 - Add live streaming messages API.
 - Add live streaming messages collector with UniTask and UniRx.

@@ -14,7 +14,7 @@ Add dependencies:
 ```json
 {
     "dependencies": {
-        "com.mochineko.youtube-live-streaming-client": "https://github.com/mochi-neko/youtube-live-streaming-client-unity.git?path=/Assets/Mochineko/YouTubeLiveStreamingClient#0.1.0",
+        "com.mochineko.youtube-live-streaming-client": "https://github.com/mochi-neko/youtube-live-streaming-client-unity.git?path=/Assets/Mochineko/YouTubeLiveStreamingClient#0.1.1",
         "com.mochineko.relent": "https://github.com/mochi-neko/Relent.git?path=/Assets/Mochineko/Relent#0.2.0",
         "com.mochineko.relent.extensions.newtonsoft-json": "https://github.com/mochi-neko/Relent.git?path=/Assets/Mochineko/Relent.Extensions/NewtonsofJson#0.2.0",
         "com.cysharp.unitask": "https://github.com/Cysharp/UniTask.git?path=src/UniTask/Assets/Plugins/UniTask",
