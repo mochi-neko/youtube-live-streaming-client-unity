@@ -1,5 +1,5 @@
 #nullable enable
-using System;
+using System.Text.RegularExpressions;
 
 namespace Mochineko.YouTubeLiveStreamingClient
 {
@@ -9,34 +9,41 @@ namespace Mochineko.YouTubeLiveStreamingClient
     public static class YouTubeVideoIDExtractor
     {
         /// <summary>
-        /// Extracts a video ID from a video URL.
+        /// Tries to extract a video ID from a raw video ID or a video URL.
         /// </summary>
-        /// <param name="url"></param>
+        /// <param name="videoIDOrURL"></param>
+        /// <param name="videoId"></param>
         /// <returns></returns>
-        public static string ExtractFromURL(string url)
+        public static bool TryExtractVideoId(string videoIDOrURL, out string videoId)
         {
-            var uri = new Uri(url);
-            var query = uri.Query;
-            var parameters = System.Web.HttpUtility.ParseQueryString(query);
-            return parameters["v"];
-        }
+            var regexForRegularUrl = new Regex(@"youtube\.com.*(\?v=|\/v\/)([^&]+)");
+            var regexForShortUrl = new Regex(@"youtu\.be\/([^?&]+)");
+            var regexForVideoId = new Regex(@"^[a-zA-Z0-9_-]{11}$"); // Standard YouTube video ID format
 
-        /// <summary>
-        /// Extracts a video ID from a video URL if the text is URL, otherwise returns the original text.
-        /// </summary>
-        /// <param name="text"></param>
-        /// <returns></returns>
-        public static string ExtractIfURL(string text)
-        {
-            if (Uri.TryCreate(text, UriKind.Absolute, out var uri))
+            var matchForRegularUrl = regexForRegularUrl.Match(videoIDOrURL);
+            if (matchForRegularUrl.Success)
             {
-                var query = uri.Query;
-                var parameters = System.Web.HttpUtility.ParseQueryString(query);
-                return parameters["v"];
+                videoId = matchForRegularUrl.Groups[2].Value;
+                return true;
+            }
+
+            var matchForShortUrl = regexForShortUrl.Match(videoIDOrURL);
+            if (matchForShortUrl.Success)
+            {
+                videoId = matchForShortUrl.Groups[1].Value;
+                return true;
+            }
+
+            var matchForVideoId = regexForVideoId.Match(videoIDOrURL);
+            if (matchForVideoId.Success)
+            {
+                videoId = videoIDOrURL;
+                return true;
             }
             else
             {
-                return text;
+                videoId = string.Empty;
+                return false;
             }
         }
     }

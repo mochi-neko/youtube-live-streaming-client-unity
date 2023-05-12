@@ -40,10 +40,10 @@ namespace Mochineko.YouTubeLiveStreamingClient.Samples
             }
 
             // Extract video ID if URL.
-            var videoID = YouTubeVideoIDExtractor.ExtractIfURL(videoIDOrURL);
-            if (string.IsNullOrEmpty(videoID))
+            var result = YouTubeVideoIDExtractor.TryExtractVideoId(videoIDOrURL, out var videoID);
+            if (result is false || string.IsNullOrEmpty(videoID))
             {
-                Debug.LogError("[YouTubeLiveStreamingClient.Samples] Video ID is null or empty.");
+                Debug.LogError($"[YouTubeLiveStreamingClient.Samples] Failed to extract video ID from:{videoIDOrURL}.");
                 return;
             }
 
