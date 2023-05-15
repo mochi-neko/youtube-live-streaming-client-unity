@@ -3,9 +3,9 @@ A client library for YouTube [Data](https://developers.google.com/youtube/v3/get
 
 ## Features
 
-- Videos API to get live chat ID.
-- Live streaming messages API.
-- Live streaming messages collection as UniRx event by polling.
+- Videos API to get live chat ID by video ID.
+- Live streaming messages API by live chat ID.
+- Live streaming messages collection as UniRx event.
 
 ## How to import by UnityPackageManager
 
