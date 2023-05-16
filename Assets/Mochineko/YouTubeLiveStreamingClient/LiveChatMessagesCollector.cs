@@ -19,7 +19,7 @@ namespace Mochineko.YouTubeLiveStreamingClient
         private readonly string apiKey;
         private readonly string videoID;
         private readonly uint maxResultsOfMessages;
-        private readonly int intervalSeconds;
+        private readonly float intervalSeconds;
         private readonly CancellationTokenSource cancellationTokenSource = new();
 
         private readonly Subject<VideosAPIResponse> onVideoInformationUpdated = new();
@@ -36,8 +36,8 @@ namespace Mochineko.YouTubeLiveStreamingClient
             HttpClient httpClient,
             string apiKey,
             string videoID,
-            uint maxResultsOfMessages,
-            int intervalSeconds)
+            uint maxResultsOfMessages = 500,
+            float intervalSeconds = 5f)
         {
             this.httpClient = httpClient;
             this.apiKey = apiKey;
@@ -96,7 +96,7 @@ namespace Mochineko.YouTubeLiveStreamingClient
             if (liveChatID == null)
             {
                 await GetLiveChatIDAsync(cancellationToken);
-                
+
                 // Succeeded to get live chat ID
                 if (liveChatID != null)
                 {
@@ -149,7 +149,8 @@ namespace Mochineko.YouTubeLiveStreamingClient
             var liveChatID = response.Items[0].LiveStreamingDetails.ActiveLiveChatId;
             if (!string.IsNullOrEmpty(liveChatID))
             {
-                Debug.Log($"[YouTubeLiveStreamingClient] Succeeded to get live chat ID:{liveChatID} from video ID:{videoID}.");
+                Debug.Log(
+                    $"[YouTubeLiveStreamingClient] Succeeded to get live chat ID:{liveChatID} from video ID:{videoID}.");
                 this.liveChatID = liveChatID;
                 onVideoInformationUpdated.OnNext(response);
             }
@@ -197,23 +198,10 @@ namespace Mochineko.YouTubeLiveStreamingClient
                     throw new UncertainResultPatternMatchException(nameof(result));
             }
 
-            try
-            {
-                // Send events on the main thread
-                await UniTask.SwitchToMainThread(cancellationToken);
-            }
-            catch (OperationCanceledException)
-            {
-                Debug.Log($"[YouTubeLiveStreamingClient] Cancelled to switch to main thread.");
-                return;
-            }
-
             foreach (var item in response.Items)
             {
                 onMessageCollected.OnNext(item);
             }
-
-            await UniTask.SwitchToThreadPool();
         }
     }
 }

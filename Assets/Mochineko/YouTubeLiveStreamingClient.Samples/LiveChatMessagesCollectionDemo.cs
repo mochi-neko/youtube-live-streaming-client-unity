@@ -20,7 +20,7 @@ namespace Mochineko.YouTubeLiveStreamingClient.Samples
         private uint maxResultsOfMessages = 500;
 
         [SerializeField]
-        private int intervalSeconds = 5;
+        private float intervalSeconds = 5f;
 
         private static readonly HttpClient HttpClient = new();
 
@@ -58,11 +58,13 @@ namespace Mochineko.YouTubeLiveStreamingClient.Samples
             // Register events
             collector
                 .OnVideoInformationUpdated
+                .SubscribeOnMainThread()
                 .Subscribe(OnVideoInformationUpdated)
                 .AddTo(this);
 
             collector
                 .OnMessageCollected
+                .SubscribeOnMainThread()
                 .Subscribe(OnMessageCollected)
                 .AddTo(this);
 
@@ -70,12 +72,14 @@ namespace Mochineko.YouTubeLiveStreamingClient.Samples
             collector
                 .OnMessageCollected
                 .Where(message => message.Snippet.Type is LiveChatMessageType.superChatEvent)
+                .SubscribeOnMainThread()
                 .Subscribe(OnSuperChatMessageCollected)
                 .AddTo(this);
             
             collector
                 .OnMessageCollected
                 .Where(message => message.Snippet.Type is LiveChatMessageType.superStickerEvent)
+                .SubscribeOnMainThread()
                 .Subscribe(OnSuperStickerMessageCollected)
                 .AddTo(this);
             
