@@ -20,6 +20,7 @@ namespace Mochineko.YouTubeLiveStreamingClient
         private readonly string videoID;
         private readonly uint maxResultsOfMessages;
         private readonly float intervalSeconds;
+        private readonly bool verbose;
         private readonly CancellationTokenSource cancellationTokenSource = new();
 
         private readonly Subject<VideosAPIResponse> onVideoInformationUpdated = new();
@@ -37,13 +38,15 @@ namespace Mochineko.YouTubeLiveStreamingClient
             string apiKey,
             string videoID,
             uint maxResultsOfMessages = 500,
-            float intervalSeconds = 5f)
+            float intervalSeconds = 5f,
+            bool verbose = true)
         {
             this.httpClient = httpClient;
             this.apiKey = apiKey;
             this.videoID = videoID;
             this.maxResultsOfMessages = maxResultsOfMessages;
             this.intervalSeconds = intervalSeconds;
+            this.verbose = verbose;
         }
 
         public void Dispose()
@@ -111,7 +114,10 @@ namespace Mochineko.YouTubeLiveStreamingClient
 
         private async UniTask GetLiveChatIDAsync(CancellationToken cancellationToken)
         {
-            Debug.Log($"[YouTubeLiveStreamingClient] Getting live chat ID from video ID:{videoID}...");
+            if (verbose)
+            {
+                Debug.Log($"[YouTubeLiveStreamingClient] Getting live chat ID from video ID:{videoID}...");
+            }
 
             var result = await VideosAPI.GetVideoInformationAsync(
                 httpClient,
@@ -123,12 +129,20 @@ namespace Mochineko.YouTubeLiveStreamingClient
             switch (result)
             {
                 case IUncertainSuccessResult<VideosAPIResponse> success:
+                    if (verbose)
+                    {
+                        Debug.Log($"[YouTubeLiveStreamingClient] Succeeded to get video API response.");
+                    }
                     response = success.Result;
                     break;
 
                 case IUncertainRetryableResult<VideosAPIResponse> retryable:
-                    Debug.Log(
-                        $"[YouTubeLiveStreamingClient] Retryable failed to get live chat ID because -> {retryable.Message}.");
+                    if (verbose)
+                    {
+                        Debug.Log(
+                            $"[YouTubeLiveStreamingClient] Retryable failed to get live chat ID because -> {retryable.Message}.");
+                    }
+
                     return;
 
                 case IUncertainFailureResult<VideosAPIResponse> failure:
@@ -142,21 +156,29 @@ namespace Mochineko.YouTubeLiveStreamingClient
 
             if (response.Items.Count == 0)
             {
-                Debug.Log($"[YouTubeLiveStreamingClient] Any items are not found in response from video ID:{videoID}.");
+                if (verbose)
+                {
+                    Debug.Log($"[YouTubeLiveStreamingClient] No items are found in response from video ID:{videoID}.");
+                }
+
                 return;
             }
 
             var liveChatID = response.Items[0].LiveStreamingDetails.ActiveLiveChatId;
             if (!string.IsNullOrEmpty(liveChatID))
             {
-                Debug.Log(
-                    $"[YouTubeLiveStreamingClient] Succeeded to get live chat ID:{liveChatID} from video ID:{videoID}.");
+                if (verbose)
+                {
+                    Debug.Log(
+                        $"[YouTubeLiveStreamingClient] Succeeded to get live chat ID:{liveChatID} from video ID:{videoID}.");
+                }
+
                 this.liveChatID = liveChatID;
                 onVideoInformationUpdated.OnNext(response);
             }
             else
             {
-                Debug.Log($"[YouTubeLiveStreamingClient] LiveChatID is null or empty from video ID:{videoID}.");
+                Debug.LogError($"[YouTubeLiveStreamingClient] LiveChatID is null or empty from video ID:{videoID}.");
             }
         }
 
@@ -164,7 +186,10 @@ namespace Mochineko.YouTubeLiveStreamingClient
             string liveChatID,
             CancellationToken cancellationToken)
         {
-            Debug.Log($"[YouTubeLiveStreamingClient] Polling live chat messages...");
+            if (verbose)
+            {
+                Debug.Log($"[YouTubeLiveStreamingClient] Polling live chat messages...");
+            }
 
             var result = await LiveChatMessagesAPI.GetLiveChatMessagesAsync(
                 httpClient,
@@ -178,15 +203,23 @@ namespace Mochineko.YouTubeLiveStreamingClient
             switch (result)
             {
                 case IUncertainSuccessResult<LiveChatMessagesAPIResponse> success:
-                    Debug.Log(
-                        $"[YouTubeLiveStreamingClient] Succeeded to get live chat messages: {success.Result.Items.Count} messages with next page token:{success.Result.NextPageToken}.");
+                    if (verbose)
+                    {
+                        Debug.Log(
+                            $"[YouTubeLiveStreamingClient] Succeeded to get live chat messages: {success.Result.Items.Count} messages with next page token:{success.Result.NextPageToken}.");
+                    }
+
                     response = success.Result;
                     this.nextPageToken = response.NextPageToken;
                     break;
 
                 case IUncertainRetryableResult<LiveChatMessagesAPIResponse> retryable:
-                    Debug.Log(
-                        $"[YouTubeLiveStreamingClient] Retryable failed to get live chat messages because -> {retryable.Message}.");
+                    if (verbose)
+                    {
+                        Debug.Log(
+                            $"[YouTubeLiveStreamingClient] Retryable failed to get live chat messages because -> {retryable.Message}.");
+                    }
+
                     return;
 
                 case IUncertainFailureResult<LiveChatMessagesAPIResponse> failure:
@@ -200,6 +233,12 @@ namespace Mochineko.YouTubeLiveStreamingClient
 
             foreach (var item in response.Items)
             {
+                if (verbose)
+                {
+                    Debug.Log(
+                        $"[YouTubeLiveStreamingClient] Collected live chat message: {item.Snippet.DisplayMessage} from {item.AuthorDetails.DisplayName} at {item.Snippet.PublishedAt}.");
+                }
+                
                 onMessageCollected.OnNext(item);
             }
         }

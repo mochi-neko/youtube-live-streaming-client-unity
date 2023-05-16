@@ -53,7 +53,8 @@ namespace Mochineko.YouTubeLiveStreamingClient.Samples
                 apiKey,
                 videoID,
                 maxResultsOfMessages,
-                intervalSeconds);
+                intervalSeconds,
+                verbose: true);
 
             // Register events
             collector
@@ -75,14 +76,14 @@ namespace Mochineko.YouTubeLiveStreamingClient.Samples
                 .SubscribeOnMainThread()
                 .Subscribe(OnSuperChatMessageCollected)
                 .AddTo(this);
-            
+
             collector
                 .OnMessageCollected
                 .Where(message => message.Snippet.Type is LiveChatMessageType.superStickerEvent)
                 .SubscribeOnMainThread()
                 .Subscribe(OnSuperStickerMessageCollected)
                 .AddTo(this);
-            
+
             // Begin collection
             collector.BeginCollection();
         }
@@ -91,7 +92,7 @@ namespace Mochineko.YouTubeLiveStreamingClient.Samples
         {
             collector?.Dispose();
         }
-        
+
         private void OnVideoInformationUpdated(VideosAPIResponse response)
         {
             Debug.Log(
@@ -103,13 +104,13 @@ namespace Mochineko.YouTubeLiveStreamingClient.Samples
             Debug.Log(
                 $"[YouTubeLiveStreamingClient.Samples] Collect message: [{message.Snippet.Type}] {message.Snippet.DisplayMessage} from {message.AuthorDetails.DisplayName} at {message.Snippet.PublishedAt}.");
         }
-        
+
         private void OnSuperChatMessageCollected(LiveChatMessageItem message)
         {
             Debug.Log(
                 $"<color=orange>[YouTubeLiveStreamingClient.Samples] Collect super chat message: {message.Snippet.DisplayMessage}, {message.Snippet.SuperChatDetails?.AmountDisplayString} from {message.AuthorDetails.DisplayName} at {message.Snippet.PublishedAt}.</color>");
         }
-        
+
         private void OnSuperStickerMessageCollected(LiveChatMessageItem message)
         {
             Debug.Log(
