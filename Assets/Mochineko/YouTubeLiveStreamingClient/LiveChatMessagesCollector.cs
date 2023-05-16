@@ -19,7 +19,7 @@ namespace Mochineko.YouTubeLiveStreamingClient
         private readonly string apiKey;
         private readonly string videoID;
         private readonly uint maxResultsOfMessages;
-        private readonly float intervalSeconds;
+        private readonly bool dynamicInterval;
         private readonly bool verbose;
         private readonly CancellationTokenSource cancellationTokenSource = new();
 
@@ -32,12 +32,14 @@ namespace Mochineko.YouTubeLiveStreamingClient
         private bool isCollecting = false;
         private string? liveChatID = null;
         private string? nextPageToken = null;
+        private float intervalSeconds;
 
         public LiveChatMessagesCollector(
             HttpClient httpClient,
             string apiKey,
             string videoID,
             uint maxResultsOfMessages = 500,
+            bool dynamicInterval = false,
             float intervalSeconds = 5f,
             bool verbose = true)
         {
@@ -55,6 +57,7 @@ namespace Mochineko.YouTubeLiveStreamingClient
             this.apiKey = apiKey;
             this.videoID = videoID;
             this.maxResultsOfMessages = maxResultsOfMessages;
+            this.dynamicInterval = dynamicInterval;
             this.intervalSeconds = intervalSeconds;
             this.verbose = verbose;
         }
@@ -139,14 +142,18 @@ namespace Mochineko.YouTubeLiveStreamingClient
             switch (result)
             {
                 case IUncertainSuccessResult<VideosAPIResponse> success:
+                {
                     if (verbose)
                     {
                         Debug.Log($"[YouTubeLiveStreamingClient] Succeeded to get video API response.");
                     }
+
                     response = success.Result;
                     break;
+                }
 
                 case IUncertainRetryableResult<VideosAPIResponse> retryable:
+                {
                     if (verbose)
                     {
                         Debug.Log(
@@ -154,11 +161,14 @@ namespace Mochineko.YouTubeLiveStreamingClient
                     }
 
                     return;
+                }
 
                 case IUncertainFailureResult<VideosAPIResponse> failure:
+                {
                     Debug.LogError(
                         $"[YouTubeLiveStreamingClient] Failed to get live chat ID because -> {failure.Message}");
                     return;
+                }
 
                 default:
                     throw new UncertainResultPatternMatchException(nameof(result));
@@ -213,6 +223,7 @@ namespace Mochineko.YouTubeLiveStreamingClient
             switch (result)
             {
                 case IUncertainSuccessResult<LiveChatMessagesAPIResponse> success:
+                {
                     if (verbose)
                     {
                         Debug.Log(
@@ -221,9 +232,16 @@ namespace Mochineko.YouTubeLiveStreamingClient
 
                     response = success.Result;
                     this.nextPageToken = response.NextPageToken;
+                    if (dynamicInterval)
+                    {
+                        this.intervalSeconds = response.PollingIntervalMillis / 1000f;
+                    }
+
                     break;
+                }
 
                 case IUncertainRetryableResult<LiveChatMessagesAPIResponse> retryable:
+                {
                     if (verbose)
                     {
                         Debug.Log(
@@ -231,11 +249,14 @@ namespace Mochineko.YouTubeLiveStreamingClient
                     }
 
                     return;
+                }
 
                 case IUncertainFailureResult<LiveChatMessagesAPIResponse> failure:
+                {
                     Debug.LogError(
                         $"[YouTubeLiveStreamingClient] Failed to get live chat messages because -> {failure.Message}");
                     return;
+                }
 
                 default:
                     throw new UncertainResultPatternMatchException(nameof(result));
@@ -248,7 +269,7 @@ namespace Mochineko.YouTubeLiveStreamingClient
                     Debug.Log(
                         $"[YouTubeLiveStreamingClient] Collected live chat message: {item.Snippet.DisplayMessage} from {item.AuthorDetails.DisplayName} at {item.Snippet.PublishedAt}.");
                 }
-                
+
                 onMessageCollected.OnNext(item);
             }
         }

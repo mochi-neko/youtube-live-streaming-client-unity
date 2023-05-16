@@ -52,8 +52,9 @@ namespace Mochineko.YouTubeLiveStreamingClient.Samples
                 HttpClient,
                 apiKey,
                 videoID,
-                maxResultsOfMessages,
-                intervalSeconds,
+                maxResultsOfMessages: maxResultsOfMessages,
+                dynamicInterval: false,
+                intervalSeconds: intervalSeconds,
                 verbose: true);
 
             // Register events
