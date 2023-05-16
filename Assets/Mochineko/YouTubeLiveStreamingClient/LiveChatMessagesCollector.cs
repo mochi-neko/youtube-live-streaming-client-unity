@@ -1,6 +1,5 @@
 #nullable enable
 using System;
-using System.Collections.Generic;
 using System.Net.Http;
 using System.Threading;
 using Cysharp.Threading.Tasks;
@@ -28,9 +27,6 @@ namespace Mochineko.YouTubeLiveStreamingClient
 
         private readonly Subject<LiveChatMessageItem> onMessageCollected = new();
         public IObservable<LiveChatMessageItem> OnMessageCollected => onMessageCollected;
-
-        private readonly List<LiveChatMessageItem> messagesCache = new();
-        public IReadOnlyList<LiveChatMessageItem> MessagesCache => messagesCache;
 
         private bool isCollecting = false;
         private string? liveChatID = null;
@@ -214,7 +210,6 @@ namespace Mochineko.YouTubeLiveStreamingClient
 
             foreach (var item in response.Items)
             {
-                messagesCache.Add(item);
                 onMessageCollected.OnNext(item);
             }
 
