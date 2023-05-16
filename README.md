@@ -1,5 +1,5 @@
 # youtube-live-streaming-client-unity
-A client library for YouTube [Data](https://developers.google.com/youtube/v3/getting-started)/[Live Streaming](https://developers.google.com/youtube/v3/live/docs) API v3 to get [live chat messages](https://developers.google.com/youtube/v3/live/docs/liveChatMessages) for Unity.
+A client library for YouTube [Data](https://developers.google.com/youtube/v3/getting-started) / [Live Streaming](https://developers.google.com/youtube/v3/live/docs) API v3 to get [live chat messages](https://developers.google.com/youtube/v3/live/docs/liveChatMessages) for Unity.
 
 ## Features
 
@@ -36,18 +36,18 @@ Standard workflow is as follows.
 
 You can select from 2 ways to do above workflow.
 - Directly use `VideosAPI` and `LiveChatMessagesAPI`.
-  - See [test code](https://github.com/mochi-neko/youtube-live-streaming-client-unity/blob/main/Assets/Mochineko/YouTubeLiveStreamingClient.Tests/LiveChatMessagesAPITest.cs).
-- Use `LiveChatMessagesCollector` that polls `LiveChatMessagesAPI` and provides messages as event.
-  - See [sample code](https://github.com/mochi-neko/youtube-live-streaming-client-unity/blob/main/Assets/Mochineko/YouTubeLiveStreamingClient.Samples/LiveChatMessagesCollectionDemo.cs). 
+  - See [test code](./Assets/Mochineko/YouTubeLiveStreamingClient.Tests/LiveChatMessagesAPITest.cs).
+- Use `LiveChatMessagesCollector` that polls `LiveChatMessagesAPI` and provides messages as UniRx event.
+  - See [sample code](./Assets/Mochineko/YouTubeLiveStreamingClient.Samples/LiveChatMessagesCollectionDemo.cs). 
 
 ## Changelog
 
-See [CHANGELOG](https://github.com/mochi-neko/youtube-live-streaming-client-unity/blob/main/CHANGELOG.md).
+See [CHANGELOG](./CHANGELOG.md).
 
 ## 3rd Party Notices
 
-See [NOTICE](https://github.com/mochi-neko/youtube-live-streaming-client-unity/blob/main/NOTICE.md).
+See [NOTICE](./NOTICE.md).
 
 ## License
 
-Licensed under the [MIT](https://github.com/mochi-neko/youtube-live-streaming-client-unity/blob/main/LICENSE) license.
+Licensed under the [MIT](./LICENSE) license.
