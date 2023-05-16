@@ -41,6 +41,16 @@ namespace Mochineko.YouTubeLiveStreamingClient
             float intervalSeconds = 5f,
             bool verbose = true)
         {
+            if (string.IsNullOrEmpty(apiKey))
+            {
+                throw new ArgumentException($"{nameof(apiKey)} must no be empty.");
+            }
+
+            if (string.IsNullOrEmpty(videoID))
+            {
+                throw new ArgumentException($"{nameof(videoID)} must no be empty.");
+            }
+
             this.httpClient = httpClient;
             this.apiKey = apiKey;
             this.videoID = videoID;
