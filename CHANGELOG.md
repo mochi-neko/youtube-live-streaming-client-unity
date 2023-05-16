@@ -7,6 +7,19 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.2.0] - 2023-05-16
+
+## Added
+- Add verbose option to `LiveStreamingMessagesCollector`.
+- Add dynamic interval option to `LiveStreamingMessagesCollector`.
+- Add string validations to `LiveStreamingMessagesCollector`.
+
+## Changed
+- Change thread of publishing events on `LiveStreamingMessagesCollector` to a thread pool.
+
+## Fixed
+- Fix type of interval option of `LiveStreamingMessagesCollector` from `int` to `float`.
+
 ## [0.1.2] - 2023-05-16
 
 ## Removed
