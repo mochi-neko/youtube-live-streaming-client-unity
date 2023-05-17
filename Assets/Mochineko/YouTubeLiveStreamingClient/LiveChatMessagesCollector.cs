@@ -16,7 +16,7 @@ namespace Mochineko.YouTubeLiveStreamingClient
     public sealed class LiveChatMessagesCollector : IDisposable
     {
         private readonly HttpClient httpClient;
-        private readonly string apiKey;
+        private readonly IAPIKeyProvider apiKeyProvider;
         private readonly string videoID;
         private readonly uint maxResultsOfMessages;
         private readonly bool dynamicInterval;
@@ -54,7 +54,35 @@ namespace Mochineko.YouTubeLiveStreamingClient
             }
 
             this.httpClient = httpClient;
-            this.apiKey = apiKey;
+            this.apiKeyProvider = new SingleAPIKeyProvider(apiKey);
+            this.videoID = videoID;
+            this.maxResultsOfMessages = maxResultsOfMessages;
+            this.dynamicInterval = dynamicInterval;
+            this.intervalSeconds = intervalSeconds;
+            this.verbose = verbose;
+        }
+        
+        public LiveChatMessagesCollector(
+            HttpClient httpClient,
+            string[] apiKeys,
+            string videoID,
+            uint maxResultsOfMessages = 500,
+            bool dynamicInterval = false,
+            float intervalSeconds = 5f,
+            bool verbose = true)
+        {
+            if (apiKeys.Length == 0)
+            {
+                throw new ArgumentException($"{nameof(apiKeys)} must not be empty.");
+            }
+
+            if (string.IsNullOrEmpty(videoID))
+            {
+                throw new ArgumentException($"{nameof(videoID)} must no be empty.");
+            }
+
+            this.httpClient = httpClient;
+            this.apiKeyProvider = new MultiAPIKeyProvider(apiKeys);
             this.videoID = videoID;
             this.maxResultsOfMessages = maxResultsOfMessages;
             this.dynamicInterval = dynamicInterval;
@@ -134,7 +162,7 @@ namespace Mochineko.YouTubeLiveStreamingClient
 
             var result = await VideosAPI.GetVideoInformationAsync(
                 httpClient,
-                apiKey,
+                apiKeyProvider.APIKey,
                 videoID,
                 cancellationToken);
 
@@ -150,6 +178,33 @@ namespace Mochineko.YouTubeLiveStreamingClient
 
                     response = success.Result;
                     break;
+                }
+
+                case LimitExceededResult<VideosAPIResponse> limitExceeded:
+                {
+                    if (verbose)
+                    {
+                        Debug.LogWarning(
+                            $"[YouTubeLiveStreamingClient] Failed to get live chat ID because -> {limitExceeded.Message}.");
+                    }
+
+                    if (apiKeyProvider.TryChangeKey())
+                    {
+                        if (verbose)
+                        {
+                            Debug.Log(
+                                $"[YouTubeLiveStreamingClient] Change API key and continue.");
+                        }
+                            
+                        // Use another API key from next time
+                        return;
+                    }
+                    else
+                    {
+                        Debug.LogError(
+                            $"[YouTubeLiveStreamingClient] Failed to change API key.");
+                        return;
+                    }
                 }
 
                 case IUncertainRetryableResult<VideosAPIResponse> retryable:
@@ -213,7 +268,7 @@ namespace Mochineko.YouTubeLiveStreamingClient
 
             var result = await LiveChatMessagesAPI.GetLiveChatMessagesAsync(
                 httpClient,
-                apiKey,
+                apiKeyProvider.APIKey,
                 liveChatID,
                 cancellationToken,
                 pageToken: nextPageToken,
@@ -238,6 +293,33 @@ namespace Mochineko.YouTubeLiveStreamingClient
                     }
 
                     break;
+                }
+                
+                case LimitExceededResult<LiveChatMessagesAPIResponse> limitExceeded:
+                {
+                    if (verbose)
+                    {
+                        Debug.LogWarning(
+                            $"[YouTubeLiveStreamingClient] Failed to get live chat messages because -> {limitExceeded.Message}.");
+                    }
+
+                    if (apiKeyProvider.TryChangeKey())
+                    {
+                        if (verbose)
+                        {
+                            Debug.Log(
+                                $"[YouTubeLiveStreamingClient] Change API key and continue.");
+                        }
+                            
+                        // Use another API key from next time
+                        return;
+                    }
+                    else
+                    {
+                        Debug.LogError(
+                            $"[YouTubeLiveStreamingClient] Failed to change API key.");
+                        return;
+                    }
                 }
 
                 case IUncertainRetryableResult<LiveChatMessagesAPIResponse> retryable:

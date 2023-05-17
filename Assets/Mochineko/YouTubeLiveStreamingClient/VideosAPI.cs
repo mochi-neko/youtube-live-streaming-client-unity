@@ -125,12 +125,19 @@ namespace Mochineko.YouTubeLiveStreamingClient
                         throw new ResultPatternMatchException(nameof(deserializeResult));
                 }
             }
-            // Retryable
-            else if (responseMessage.StatusCode is HttpStatusCode.TooManyRequests
-                     || (int)responseMessage.StatusCode is >= 500 and <= 599)
+            // Quota limit exceeded error
+            else if (responseMessage.StatusCode is HttpStatusCode.TooManyRequests)
             {
+                var errorResponse = await responseMessage.Content.ReadAsStringAsync();
+                return new LimitExceededResult<VideosAPIResponse>(
+                    $"Failed because the API key has exceeded quota limit with status code:({(int)responseMessage.StatusCode}){responseMessage.StatusCode}, response:{errorResponse}.");
+            }
+            // Retryable
+            else if ((int)responseMessage.StatusCode is >= 500 and <= 599)
+            {
+                var errorResponse = await responseMessage.Content.ReadAsStringAsync();
                 return UncertainResults.RetryWithTrace<VideosAPIResponse>(
-                    $"Retryable because the API returned status code:({(int)responseMessage.StatusCode}){responseMessage.StatusCode}.");
+                    $"Retryable because the API returned status code:({(int)responseMessage.StatusCode}){responseMessage.StatusCode}, response:{errorResponse}.");
             }
             // Response error
             else
