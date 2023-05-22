@@ -62,7 +62,8 @@ namespace Mochineko.YouTubeLiveStreamingClient
             this.verbose = verbose;
         }
         
-        public LiveChatMessagesCollector(
+        // TODO: Check
+        private LiveChatMessagesCollector(
             HttpClient httpClient,
             string[] apiKeys,
             string videoID,
