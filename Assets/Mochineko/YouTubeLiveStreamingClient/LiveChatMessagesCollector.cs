@@ -344,6 +344,9 @@ namespace Mochineko.YouTubeLiveStreamingClient
                     throw new UncertainResultPatternMatchException(nameof(result));
             }
 
+            // NOTE: Publish event on the main thread.
+            await UniTask.SwitchToMainThread(cancellationToken);
+
             foreach (var item in response.Items)
             {
                 if (verbose)
@@ -354,6 +357,8 @@ namespace Mochineko.YouTubeLiveStreamingClient
 
                 onMessageCollected.OnNext(item);
             }
+
+            await UniTask.SwitchToThreadPool();
         }
     }
 }
