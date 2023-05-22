@@ -7,13 +7,16 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
-## [0.2.1] - 2023-XX-XX
-
 ## Added
 - Add multiple API key option.
 
 ## Changed
 - Change API result for 429(TooManyRequests) status code to original result:`LimitExceededResult<T>`.
+
+## [0.2.1] - 2023-05-22
+
+## Changed
+- Revert thread of publishing events on `LiveStreamingMessagesCollector` to the main thread.
 
 ## [0.2.0] - 2023-05-16
 
