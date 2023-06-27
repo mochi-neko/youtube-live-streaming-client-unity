@@ -15,8 +15,8 @@ namespace Mochineko.YouTubeLiveStreamingClient.Responses
         [JsonProperty("amountDisplayString"), JsonRequired]
         public string AmountDisplayString { get; private set; } = string.Empty;
         
-        [JsonProperty("userComment"), JsonRequired]
-        public string UserComment { get; private set; } = string.Empty;
+        [JsonProperty("userComment")]
+        public string? UserComment { get; private set; }
 
         [JsonProperty("tier"), JsonRequired]
         public uint Tier { get; private set; }
