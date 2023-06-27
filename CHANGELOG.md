@@ -13,6 +13,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## Changed
 - Change API result for 429(TooManyRequests) status code to original result:`LimitExceededResult<T>`.
 
+## [0.2.2] - 2023-06-27
+
+### Fixed
+- Fix `userComment` to optional in `SuperChatDetails`.
+
+### Changed
+- Set dependencies to `package.json`.
+
 ## [0.2.1] - 2023-05-22
 
 ## Changed
