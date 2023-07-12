@@ -1,6 +1,6 @@
 {
   "name": "com.mochineko.youtube-live-streaming-client",
-  "version": "0.2.2",
+  "version": "0.2.3",
   "displayName": "YouTube Live Streaming Client",
   "description": "YouTube Live Streaming API Client for Unity.",
   "unity": "2021.3",
@@ -11,11 +11,5 @@
   "repository": {
     "type": "git",
     "url": "git+ssh://git@github.com:mochi-neko/youtube-live-streaming-client-unity.git"
-  },
-  "dependencies": {
-    "com.mochineko.relent": "https://github.com/mochi-neko/Relent.git?path=/Assets/Mochineko/Relent#0.2.0",
-    "com.mochineko.relent.extensions.newtonsoft-json": "https://github.com/mochi-neko/Relent.git?path=/Assets/Mochineko/Relent.Extensions/NewtonsofJson#0.2.0",
-    "com.cysharp.unitask": "https://github.com/Cysharp/UniTask.git?path=src/UniTask/Assets/Plugins/UniTask",
-    "com.neuecc.unirx": "https://github.com/neuecc/UniRx.git?path=Assets/Plugins/UniRx/Scripts"
   }
 }

@@ -14,7 +14,11 @@ Add following dependencies to your `/Packages/manifest.json`.
 ```json
 {
     "dependencies": {
-        "com.mochineko.youtube-live-streaming-client": "https://github.com/mochi-neko/youtube-live-streaming-client-unity.git?path=/Assets/Mochineko/YouTubeLiveStreamingClient#0.2.2",
+        "com.mochineko.youtube-live-streaming-client": "https://github.com/mochi-neko/youtube-live-streaming-client-unity.git?path=/Assets/Mochineko/YouTubeLiveStreamingClient#0.2.3",
+        "com.mochineko.relent": "https://github.com/mochi-neko/Relent.git?path=/Assets/Mochineko/Relent#0.2.0",
+        "com.mochineko.relent.extensions.newtonsoft-json": "https://github.com/mochi-neko/Relent.git?path=/Assets/Mochineko/Relent.Extensions/NewtonsofJson#0.2.0",
+        "com.cysharp.unitask": "https://github.com/Cysharp/UniTask.git?path=src/UniTask/Assets/Plugins/UniTask",
+        "com.neuecc.unirx": "https://github.com/neuecc/UniRx.git?path=Assets/Plugins/UniRx/Scripts"
         ...
     }
 }
