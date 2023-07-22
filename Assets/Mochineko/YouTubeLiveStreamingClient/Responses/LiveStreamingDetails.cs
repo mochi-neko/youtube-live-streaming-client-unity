@@ -7,8 +7,8 @@ namespace Mochineko.YouTubeLiveStreamingClient.Responses
     [JsonObject]
     public sealed class LiveStreamingDetails
     {
-        [JsonProperty("actualStartTime"), JsonRequired]
-        public DateTime ActualStartTime { get; private set; }
+        [JsonProperty("actualStartTime")]
+        public DateTime? ActualStartTime { get; private set; }
 
         [JsonProperty("scheduledStartTime")]
         public DateTime? ScheduledStartTime { get; private set; }
