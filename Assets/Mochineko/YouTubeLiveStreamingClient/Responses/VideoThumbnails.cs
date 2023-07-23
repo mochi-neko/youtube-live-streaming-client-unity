@@ -19,6 +19,6 @@ namespace Mochineko.YouTubeLiveStreamingClient.Responses
         public VideoThumbnail Standard { get; private set; } = new();
         
         [JsonProperty("maxres")]
-        public VideoThumbnail Maxres { get; private set; } = new();
+        public VideoThumbnail? Maxres { get; private set; }
     }
 }
