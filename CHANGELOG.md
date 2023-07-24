@@ -11,7 +11,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Add multiple API key option.
 
 ## Changed
-- Change API result for 429(TooManyRequests) status code to original result:`LimitExceededResult<T>`.
+- Change API result for rate limit exceeded (= 429:TooManyRequests) to original result:`LimitExceededResult<T>`.
+
+## [0.2.4] - 2023-07-24
+
+### Fixed
+- Fix `VideoThumbnailDetails.Maxres` to be optional.
+- Fix `LiveStreamingDetails.ActuralStartTime` to be optional.
 
 ## [0.2.3] - 2023-07-12
 
