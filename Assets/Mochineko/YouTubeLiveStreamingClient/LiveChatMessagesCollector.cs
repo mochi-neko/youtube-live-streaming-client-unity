@@ -93,6 +93,7 @@ namespace Mochineko.YouTubeLiveStreamingClient
 
         public void Dispose()
         {
+            cancellationTokenSource.Cancel();
             cancellationTokenSource.Dispose();
         }
 
