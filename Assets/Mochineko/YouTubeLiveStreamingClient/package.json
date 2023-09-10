@@ -1,6 +1,6 @@
 {
   "name": "com.mochineko.youtube-live-streaming-client",
-  "version": "0.2.4",
+  "version": "0.2.5",
   "displayName": "YouTube Live Streaming Client",
   "description": "YouTube Live Streaming API Client for Unity.",
   "unity": "2021.3",

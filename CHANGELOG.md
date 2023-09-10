@@ -13,6 +13,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## Changed
 - Change API result for rate limit exceeded (= 429:TooManyRequests) to original result:`LimitExceededResult<T>`.
 
+## [0.2.5] - 2023-09-10
+
+### Fixed
+- Fix cancellation in `LiveStreamingMessagesCollector`.
+- Fix disposing in `LiveStreamingMessagesCollector`.
+
 ## [0.2.4] - 2023-07-24
 
 ### Fixed
